@@ -75,7 +75,6 @@
 </div>
 
 <script>
-
     function load_car_models(company_id,car_model_id)
     {
         var company=document.getElementById(company_id);
@@ -102,6 +101,13 @@
     function form_handler(event) {
         event.preventDefault(); // Don't submit the form normally
     }
+
+    function convertToVND(amount) {
+        // Chuyển đổi giá trị từ Ấn hãy sang tiền Việt ở đây
+        // Ví dụ: 1 INR ≈ 330 VND (tính cụ thể tùy theo tỷ giá hối đoái thực tế)
+        return amount * 330;
+    }
+
     function send_data()
     {
         document.querySelector('form').addEventListener("submit",form_handler);
@@ -114,7 +120,9 @@
         document.getElementById('prediction').innerHTML="Wait! Predicting Price.....";
         xhr.onreadystatechange = function(){
             if(xhr.readyState == XMLHttpRequest.DONE){
-                document.getElementById('prediction').innerHTML="Prediction: ₹"+xhr.responseText;
+                var predictionINR = parseFloat(xhr.responseText);
+                var predictionVND = convertToVND(predictionINR);
+                document.getElementById('prediction').innerHTML="Prediction: " + predictionVND.toLocaleString('vi-VN') + " VND";
 
             }
         };
@@ -124,6 +132,7 @@
         xhr.send(fd);
     }
 </script>
+
 
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
